@@ -58,6 +58,16 @@ TRY.
 ENDTRY.
 ```
 
+The certificate for the `add` method needs to be provided as a table with the following format:
+
+```txt
+-----BEGIN CERTIFICATE-----
+MIIGQDCCBSigAwIBAgIQCNqWSvYNNa9hfOzsk89rUjANBgkqhkiG9w0BAQsFADBg
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+...
+-----END CERTIFICATE-----
+```
+
 ## Prerequisites
 
 SAP Basis 7.02 or higher
