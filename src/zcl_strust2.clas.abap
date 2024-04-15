@@ -11,11 +11,11 @@ CLASS zcl_strust2 DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
+    CONSTANTS c_version TYPE string VALUE '1.1.0' ##NEEDED.
+
     TYPES:
-      ty_line        TYPE c LENGTH 80.
-    TYPES:
-      ty_certificate TYPE STANDARD TABLE OF ty_line WITH DEFAULT KEY.
-    TYPES:
+      ty_line        TYPE c LENGTH 80,
+      ty_certificate TYPE STANDARD TABLE OF ty_line WITH DEFAULT KEY,
       BEGIN OF ty_certattr,
         subject     TYPE string,
         issuer      TYPE string,
@@ -25,11 +25,8 @@ CLASS zcl_strust2 DEFINITION
         datefrom    TYPE d,
         dateto      TYPE d,
         certificate TYPE xstring,
-      END OF ty_certattr.
-    TYPES:
+      END OF ty_certattr,
       ty_certattr_tt TYPE STANDARD TABLE OF ty_certattr WITH DEFAULT KEY.
-
-    CONSTANTS c_version TYPE string VALUE '1.1.0' ##NEEDED.
 
     METHODS constructor
       IMPORTING
