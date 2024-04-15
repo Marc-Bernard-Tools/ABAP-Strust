@@ -1,4 +1,4 @@
-CLASS zcx_strust DEFINITION
+CLASS zcx_strust2 DEFINITION
   PUBLIC
   INHERITING FROM cx_static_check
   CREATE PUBLIC.
@@ -28,13 +28,13 @@ CLASS zcx_strust DEFINITION
     "! Raise exception with text
     "! @parameter iv_text | Text
     "! @parameter ix_previous | Previous exception
-    "! @raising zcx_strust | Exception
+    "! @raising zcx_strust2 | Exception
     CLASS-METHODS raise
       IMPORTING
         !iv_text     TYPE clike
         !ix_previous TYPE REF TO cx_root OPTIONAL
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     "! Raise exception with T100 message
     "! <p>
@@ -47,7 +47,7 @@ CLASS zcx_strust DEFINITION
     "! @parameter iv_msgv3 | Message variable 3
     "! @parameter iv_msgv4 | Message variable 4
     "! @parameter ix_previous | Previous exception
-    "! @raising zcx_strust | Exception
+    "! @raising zcx_strust2 | Exception
     CLASS-METHODS raise_t100
       IMPORTING
         VALUE(iv_msgid) TYPE symsgid DEFAULT sy-msgid
@@ -58,16 +58,16 @@ CLASS zcx_strust DEFINITION
         VALUE(iv_msgv4) TYPE symsgv DEFAULT sy-msgv4
         !ix_previous    TYPE REF TO cx_root OPTIONAL
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     "! Raise with text from previous exception
     "! @parameter ix_previous | Previous exception
-    "! @raising zcx_strust | Exception
+    "! @raising zcx_strust2 | Exception
     CLASS-METHODS raise_with_text
       IMPORTING
         !ix_previous TYPE REF TO cx_root
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -84,7 +84,7 @@ ENDCLASS.
 
 
 
-CLASS zcx_strust IMPLEMENTATION.
+CLASS zcx_strust2 IMPLEMENTATION.
 
 
   METHOD constructor ##ADT_SUPPRESS_GENERATION.
@@ -142,7 +142,7 @@ CLASS zcx_strust IMPLEMENTATION.
       ls_t100_key-attr4 = 'IF_T100_DYN_MSG~MSGV4'.
     ENDIF.
 
-    RAISE EXCEPTION TYPE zcx_strust
+    RAISE EXCEPTION TYPE zcx_strust2
       EXPORTING
         textid   = ls_t100_key
         msgv1    = iv_msgv1

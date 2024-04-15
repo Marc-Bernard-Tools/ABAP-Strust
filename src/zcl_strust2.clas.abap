@@ -1,4 +1,4 @@
-CLASS zcl_strust DEFINITION
+CLASS zcl_strust2 DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC.
@@ -11,11 +11,11 @@ CLASS zcl_strust DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    CONSTANTS c_version TYPE string VALUE '1.0.0' ##NEEDED.
-
     TYPES:
-      ty_line        TYPE c LENGTH 80,
-      ty_certificate TYPE STANDARD TABLE OF ty_line WITH DEFAULT KEY,
+      ty_line        TYPE c LENGTH 80.
+    TYPES:
+      ty_certificate TYPE STANDARD TABLE OF ty_line WITH DEFAULT KEY.
+    TYPES:
       BEGIN OF ty_certattr,
         subject     TYPE string,
         issuer      TYPE string,
@@ -25,15 +25,18 @@ CLASS zcl_strust DEFINITION
         datefrom    TYPE d,
         dateto      TYPE d,
         certificate TYPE xstring,
-      END OF ty_certattr,
+      END OF ty_certattr.
+    TYPES:
       ty_certattr_tt TYPE STANDARD TABLE OF ty_certattr WITH DEFAULT KEY.
+
+    CONSTANTS c_version TYPE string VALUE '1.1.0' ##NEEDED.
 
     METHODS constructor
       IMPORTING
         !iv_context TYPE psecontext
         !iv_applic  TYPE ssfappl
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS load
       IMPORTING
@@ -41,37 +44,37 @@ CLASS zcl_strust DEFINITION
         !iv_id     TYPE ssfid OPTIONAL
         !iv_org    TYPE string OPTIONAL
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS add
       IMPORTING
         !it_certificate TYPE ty_certificate
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS get_own_certificate
       RETURNING
         VALUE(rs_result) TYPE ty_certattr
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS get_certificate_list
       RETURNING
         VALUE(rt_result) TYPE ty_certattr_tt
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS remove
       IMPORTING
         VALUE(iv_subject) TYPE string
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS update
       RETURNING
         VALUE(rt_result) TYPE ty_certattr_tt
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -97,25 +100,25 @@ CLASS zcl_strust DEFINITION
         !iv_id  TYPE ssfid OPTIONAL
         !iv_org TYPE string OPTIONAL
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS _lock
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS _unlock
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
     METHODS _save
       RAISING
-        zcx_strust.
+        zcx_strust2.
 
 ENDCLASS.
 
 
 
-CLASS zcl_strust IMPLEMENTATION.
+CLASS zcl_strust2 IMPLEMENTATION.
 
 
   METHOD add.
@@ -137,11 +140,11 @@ CLASS zcl_strust IMPLEMENTATION.
           ASSIGN lv_certb64 TO <lv_data>.
           ASSERT sy-subrc = 0.
         ELSE.
-          zcx_strust=>raise( 'Inconsistent certificate format'(010) ).
+          zcx_strust2=>raise( 'Inconsistent certificate format'(010) ).
         ENDIF.
       CATCH cx_sy_regex_too_complex.
         " e.g. multiple PEM frames in file
-        zcx_strust=>raise( 'Inconsistent certificate format'(010) ).
+        zcx_strust2=>raise( 'Inconsistent certificate format'(010) ).
     ENDTRY.
 
     TRY.
@@ -168,7 +171,7 @@ CLASS zcl_strust IMPLEMENTATION.
             OTHERS              = 5.
         IF sy-subrc <> 0.
           _unlock( ).
-          zcx_strust=>raise_t100( ).
+          zcx_strust2=>raise_t100( ).
         ENDIF.
 
         ls_cert_new-datefrom = ls_cert_new-validfrom(8).
@@ -177,7 +180,7 @@ CLASS zcl_strust IMPLEMENTATION.
 
       CATCH cx_abap_x509_certificate.
         _unlock( ).
-        zcx_strust=>raise_t100( ).
+        zcx_strust2=>raise_t100( ).
     ENDTRY.
 
   ENDMETHOD.
@@ -200,7 +203,7 @@ CLASS zcl_strust IMPLEMENTATION.
         pse_not_found = 1
         OTHERS        = 2.
     IF sy-subrc <> 0.
-      zcx_strust=>raise_t100( ).
+      zcx_strust2=>raise_t100( ).
     ENDIF.
 
   ENDMETHOD.
@@ -229,7 +232,7 @@ CLASS zcl_strust IMPLEMENTATION.
         OTHERS                = 6.
     IF sy-subrc <> 0.
       _unlock( ).
-      zcx_strust=>raise_t100( ).
+      zcx_strust2=>raise_t100( ).
     ENDIF.
 
     LOOP AT lt_certlist ASSIGNING <lv_certlist>.
@@ -253,7 +256,7 @@ CLASS zcl_strust IMPLEMENTATION.
           OTHERS              = 5.
       IF sy-subrc <> 0.
         _unlock( ).
-        zcx_strust=>raise_t100( ).
+        zcx_strust2=>raise_t100( ).
       ENDIF.
 
       ls_cert_old-datefrom = ls_cert_old-validfrom(8).
@@ -286,7 +289,7 @@ CLASS zcl_strust IMPLEMENTATION.
         OTHERS                = 6.
     IF sy-subrc <> 0.
       _unlock( ).
-      zcx_strust=>raise_t100( ).
+      zcx_strust2=>raise_t100( ).
     ENDIF.
 
     CALL FUNCTION 'SSFC_PARSE_CERTIFICATE'
@@ -306,7 +309,7 @@ CLASS zcl_strust IMPLEMENTATION.
         OTHERS              = 5.
     IF sy-subrc <> 0.
       _unlock( ).
-      zcx_strust=>raise_t100( ).
+      zcx_strust2=>raise_t100( ).
     ENDIF.
 
     ms_cert_old-datefrom = ms_cert_old-validfrom(8).
@@ -339,7 +342,7 @@ CLASS zcl_strust IMPLEMENTATION.
           iv_id  = iv_id
           iv_org = iv_org ).
       ELSE.
-        zcx_strust=>raise_t100( ).
+        zcx_strust2=>raise_t100( ).
       ENDIF.
     ENDIF.
 
@@ -370,7 +373,7 @@ CLASS zcl_strust IMPLEMENTATION.
           OTHERS                = 6.
       IF sy-subrc <> 0.
         _unlock( ).
-        zcx_strust=>raise_t100( ).
+        zcx_strust2=>raise_t100( ).
       ENDIF.
 
       mv_save = abap_true.
@@ -412,7 +415,7 @@ CLASS zcl_strust IMPLEMENTATION.
               OTHERS                = 6.
           IF sy-subrc <> 0.
             _unlock( ).
-            zcx_strust=>raise_t100( ).
+            zcx_strust2=>raise_t100( ).
           ENDIF.
 
           mv_save = abap_true.
@@ -442,7 +445,7 @@ CLASS zcl_strust IMPLEMENTATION.
           OTHERS              = 6.
       IF sy-subrc <> 0.
         _unlock( ).
-        zcx_strust=>raise_t100( ).
+        zcx_strust2=>raise_t100( ).
       ENDIF.
 
       mv_save = abap_true.
@@ -500,7 +503,7 @@ CLASS zcl_strust IMPLEMENTATION.
         ssf_unknown_error = 1
         OTHERS            = 2.
     IF sy-subrc <> 0.
-      zcx_strust=>raise_t100( ).
+      zcx_strust2=>raise_t100( ).
     ENDIF.
 
     mv_tempfile = lv_psepath.
@@ -521,7 +524,7 @@ CLASS zcl_strust IMPLEMENTATION.
         internal_error  = 3
         OTHERS          = 4.
     IF sy-subrc <> 0.
-      zcx_strust=>raise_t100( ).
+      zcx_strust2=>raise_t100( ).
     ENDIF.
 
   ENDMETHOD.
@@ -549,7 +552,7 @@ CLASS zcl_strust IMPLEMENTATION.
         OTHERS            = 4.
     IF sy-subrc <> 0.
       _unlock( ).
-      zcx_strust=>raise_t100( ).
+      zcx_strust2=>raise_t100( ).
     ENDIF.
 
     lv_credname = mv_psename.
@@ -578,9 +581,9 @@ CLASS zcl_strust IMPLEMENTATION.
     TRY.
         DELETE DATASET mv_tempfile.
       CATCH cx_sy_file_open.
-        zcx_strust=>raise( 'Error deleting file'(020) && | { mv_tempfile }| ).
+        zcx_strust2=>raise( 'Error deleting file'(020) && | { mv_tempfile }| ).
       CATCH cx_sy_file_authority.
-        zcx_strust=>raise( 'Not authorized to delete file'(030) && | { mv_tempfile }| ).
+        zcx_strust2=>raise( 'Not authorized to delete file'(030) && | { mv_tempfile }| ).
     ENDTRY.
 
     " Unlock PSE
@@ -593,7 +596,7 @@ CLASS zcl_strust IMPLEMENTATION.
         internal_error  = 3
         OTHERS          = 4.
     IF sy-subrc <> 0.
-      zcx_strust=>raise_t100( ).
+      zcx_strust2=>raise_t100( ).
     ENDIF.
 
   ENDMETHOD.
