@@ -1,7 +1,7 @@
-![Version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/Marc-Bernard-Tools/ABAP-Strust/src/zcl_strust.clas.abap/c_version&label=Version&color=blue)
+![Version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/Marc-Bernard-Tools/ABAP-Strust/src/zcl_strust2.clas.abap/c_version&label=Version&color=blue)
 
-[![License](https://img.shields.io/github/license/Marc-Bernard-Tools/ABAP-Strust?label=License&color=green)](LICENSE)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?color=green)](https://github.com/Marc-Bernard-Tools/.github/blob/main/CODE_OF_CONDUCT.md)
+[![License](https://img.shields.io/github/license/Marc-Bernard-Tools/ABAP-Strust?label=License&color=success)](LICENSE)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?color=success)](https://github.com/Marc-Bernard-Tools/.github/blob/main/CODE_OF_CONDUCT.md)
 [![REUSE Status](https://api.reuse.software/badge/github.com/Marc-Bernard-Tools/ABAP-Strust)](https://api.reuse.software/info/github.com/Marc-Bernard-Tools/ABAP-Strust)
 
 # Trust Management
@@ -14,7 +14,7 @@ NO WARRANTIES, [MIT License](LICENSE)
 
 ## Usage
 
-Example of creating, updating, or removing a certificate using class `zcl_strust`.
+Example of creating, updating, or removing a certificate using class `zcl_strust2`.
 
 ```abap
 CONSTANTS:
@@ -25,8 +25,8 @@ CONSTANTS:
   c_subject TYPE string VALUE 'CN=*.marcbernardtools.com' ##NO_TEXT.
 
 DATA:
-  lo_strust TYPE REF TO zcl_strust,
-  lx_error  TYPE REF TO zcx_strust.
+  lo_strust TYPE REF TO zcl_strust2,
+  lx_error  TYPE REF TO zcx_strust2.
 
 TRY.
     CREATE OBJECT lo_strust
@@ -53,7 +53,7 @@ TRY.
       lo_strust->update( ).
     ENDIF.
 
-  CATCH zcx_strust INTO lx_error.
+  CATCH zcx_strust2 INTO lx_error.
     MESSAGE lx_error TYPE 'I' DISPLAY LIKE 'E'.
 ENDTRY.
 ```
